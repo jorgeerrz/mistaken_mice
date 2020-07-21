@@ -18,4 +18,4 @@ def rebin(input, newbin, oldbin = 0.01):
       slc = input[:,:,int(idx*poolbin):int((idx+1)*poolbin)]
       newcount[:,:,idx] = np.sum(slc, axis=2)
 
-  return newcount
+  return newcount, newbin
