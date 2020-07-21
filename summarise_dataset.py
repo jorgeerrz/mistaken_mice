@@ -26,7 +26,7 @@ def summarise_dataset(dataset):
 
   sns.distplot(details['n_neurons'], kde = False, color='b', rug=True, ax=axs[0], axlabel ='Number of neurons\nper session')
   axs[0].set_title('{} neurons across sessions'.format(total_neurons))
-  sns.distplot(details['n_neurons'], kde = False, color='g', rug=True, ax=axs[1], axlabel = 'Number of trials\nper session')
+  sns.distplot(details['n_trials'], kde = False, color='g', rug=True, ax=axs[1], axlabel = 'Number of trials\nper session')
   axs[1].set_title('{} trials across sessions'.format(total_trials))
 
   return details
