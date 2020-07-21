@@ -63,4 +63,4 @@ def neurons_PCA(dat,tVar,minT,maxT):
     return PCneurons,weights,PCrange
 
 
-PCneurons,weights,PCrange = neurons_PCA(dat,0.1,51,130)
+# PCneurons,weights,PCrange = neurons_PCA(dat,0.1,51,130)
