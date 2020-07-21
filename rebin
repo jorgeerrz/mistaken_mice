@@ -11,11 +11,11 @@ def rebin(input, newbin, oldbin = 0.01):
   poolbin = newbin/oldbin # calculates numbers of bins to be pooled into one new bin
   newcount = np.zeros((input.shape[0],input.shape[1],int(input.shape[2]/poolbin))) # create matrix of zeros with appropriate third dimension (number of bins)
 
-  index = list(range(int(input.shape[2]/poolbin)))
-  for idx in enumerate(index):
-      # sum up counts from one step to the next
-      # newcount[:,:,bin] = np.sum(input...)
-      print('loop', idx)
 
+  index = list(range(int(input.shape[2]/poolbin)))
+  for idx in index:
+      # sum up counts from one step to the next
+      slc = input[:,:,idx:int(idx*poolbin)]
+      newcount[:,:,idx] = np.sum(slc, axis=2)
 
   return newcount
