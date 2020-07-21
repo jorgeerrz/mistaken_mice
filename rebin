@@ -15,7 +15,7 @@ def rebin(input, newbin, oldbin = 0.01):
   index = list(range(int(input.shape[2]/poolbin)))
   for idx in index:
       # sum up counts from one step to the next
-      newcount[:,:,idx] = np.sum(input[:,:,[idx:idx*poolbin]]) # needs some help here!!
-      print(idx)
+      slc = input[:,:,idx:int(idx*poolbin)]
+      newcount[:,:,idx] = np.sum(slc, axis=2)
 
   return newcount
