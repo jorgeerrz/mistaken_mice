@@ -54,7 +54,7 @@ if __name__ == "__main__":
 					print("!!! Failed to download data !!!")
 				else:
 					with open(fname[j], "wb") as fid:
-					fid.write(r.content)
+						fid.write(r.content)
   
 	# Data loading
 	alldat = np.array([])
