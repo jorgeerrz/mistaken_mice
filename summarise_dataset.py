@@ -21,7 +21,7 @@ def summarise_dataset(dataset):
 	total_trials = int(np.sum(details['n_trials']))
 
 	sns.set(style="white", palette="muted", color_codes=True)
-	fig, axs = plt.subplots(1, 2, figsize=(7, 3), sharex=True)
+	fig, axs = plt.subplots(1, 2, figsize=(7, 3))
 	sns.despine(left=True)
 
 	sns.distplot(details['n_neurons'], kde = False, color='b', rug=True, ax=axs[0], axlabel ='Number of neurons\nper session')
