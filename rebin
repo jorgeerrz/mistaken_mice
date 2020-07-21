@@ -1,3 +1,5 @@
+import numpy as np
+
 def rebin(input, newbin, oldbin = 0.01):
   ''' takes spike counts from 'spks' and rebins them into a new time bin specified by newbin
 
