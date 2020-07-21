@@ -52,9 +52,9 @@ if __name__ == "__main__":
 			else:
 				if r.status_code != requests.codes.ok:
 					print("!!! Failed to download data !!!")
-			else:
-				with open(fname[j], "wb") as fid:
-				fid.write(r.content)
+				else:
+					with open(fname[j], "wb") as fid:
+					fid.write(r.content)
   
 	# Data loading
 	alldat = np.array([])
