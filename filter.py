@@ -28,7 +28,7 @@ def filter_dataset(alldata):
     #alldata is the collated data from all sessions/neurons/timepoints as shown in the tutorial notebook
     #grab spikes/choices from one section
     alldata_f = np.zeros_like(alldata)
-    for session_id in range(alldata.shape):       
+    for session_id in range(alldata.shape[0]):       
         spikes_f, chcs_f, RTs_f = filter_spikes(alldata,session_id)
         dict_f = {"spks" : spikes_f, "response": chcs_f, "response_time": RTs_f, 
         "brain_area": alldata[session_id]['brain_area'], "bin_size": alldata[session_id]['bin_size']}
