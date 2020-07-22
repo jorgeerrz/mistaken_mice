@@ -10,12 +10,10 @@ def neurons_PCA(dat,tVar,minT,maxT):
     #Perform PCA with the neurons of a single session. Components are estimated by considering activity in the range minT:maxT
     #Example input neurons_PCA(dat,0.9,51,130)
     
-    import pandas as pd
     import numpy as np
     import matplotlib.pyplot as plt
     from sklearn.decomposition import PCA
     
-    dt = dat['bin_size'] # binning at 10 ms
     NT = dat['spks'].shape[-1]
     
     #@title top PC directions from stimulus + response period, with projections of the entire duration    
@@ -32,7 +30,7 @@ def neurons_PCA(dat,tVar,minT,maxT):
     weights = model.components_ #extract the weight of each PC dimension for each neuron
     PCneurons = weights @ np.reshape(dat['spks'], (NN,-1)) #multiply each neuron by its corresponding weights
     #(N.B. the entire trial durations for each neuron are multiplied by the weight! But weight were extracted only from a portion)
-    PCneurons = np.reshape(pc_10ms, (nPCs, -1, NT)) #session-long time series are split again into trial-long time series
+    PCneurons = np.reshape(PCneurons, (nPCs, -1, NT)) #session-long time series are split again into trial-long time series
 
     explVar = model.explained_variance_
     plt.figure()
@@ -48,7 +46,7 @@ def neurons_PCA(dat,tVar,minT,maxT):
     
     #@title The top PCs capture most variance across the brain. What do they care about? 
     plt.figure(figsize= (20, 6))
-    for iPC in range((pc_10ms).shape[0]):
+    for iPC in range((PCneurons).shape[0]):
     
       this_pc = PCneurons[iPC]
     
@@ -60,7 +58,11 @@ def neurons_PCA(dat,tVar,minT,maxT):
         plt.ylabel('Component value')
       # plt.title('PC %d'%j)
 
-    return PCneurons,weights,PCrange
+    dat['PCs'] = PCneurons
+    dat['weights'] = weights
+    dat['PCrange'] = PCrange
+
+    return dat
 
 
-# PCneurons,weights,PCrange = neurons_PCA(dat,0.1,51,130)
+newdat = neurons_PCA(dat,0.1,51,130)
