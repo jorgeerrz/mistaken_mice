@@ -17,7 +17,7 @@ def neurons_PCA(dat,tVar,minT,maxT):
     NT = dat['spks'].shape[-1]
     
     #@title top PC directions from stimulus + response period, with projections of the entire duration    
-    NN = len(dat['brain_area'])
+    NN = dat['spks'].shape[0]
     #All trials are concatenated to result in a session-long time series for each neuron:
     droll = np.reshape(dat['spks'][:,:,minT:maxT], (NN,-1)) # first 80 bins = 1.6 sec
     #(N.B. only the time bins for stimulus + response are used!)    
@@ -63,6 +63,3 @@ def neurons_PCA(dat,tVar,minT,maxT):
     dat['PCrange'] = PCrange
 
     return dat
-
-
-newdat = neurons_PCA(dat,0.1,51,130)
