@@ -6,3 +6,5 @@ steinmetz_part2.npz
 filter2.ipynb
 *.pyc
 .DS_Store
+.idea*
+.ipynb_checkpoints*
