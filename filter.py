@@ -1,7 +1,7 @@
 import numpy as np
 
 #this function will do the filtering
-def filter_spikes(alldata, session_id,brain_area=None):
+def filter_spikes(alldata, session_id,brain_area=None,unfair_only=True):
     #alldata is the collated data from all sessions/neurons/timepoints as shown in the tutorial notebook
     #grab spikes/choices from one section
     dat = alldata[session_id]
@@ -10,11 +10,18 @@ def filter_spikes(alldata, session_id,brain_area=None):
     RTs = dat['response_time']
 
     #grab only spikes/choices from trials where left/right contrast is equal and nonzero
-    unfair_filter = np.logical_and((dat['contrast_right']==dat['contrast_left']), (dat['contrast_right'] != 0))
-    unfair_chosey_filter = np.logical_and(unfair_filter,(dat['response']!=0))
-    spks = spks[:,unfair_chosey_filter,:]
-    chcs = chcs[unfair_chosey_filter]
-    RTs = RTs[unfair_chosey_filter]
+    if unfair_only:
+        unfair_filter = np.logical_and((dat['contrast_right']==dat['contrast_left']), (dat['contrast_right'] != 0))
+        unfair_chosey_filter = np.logical_and(unfair_filter,(dat['response']!=0))
+        spks = spks[:,unfair_chosey_filter,:]
+        chcs = chcs[unfair_chosey_filter]
+        RTs = RTs[unfair_chosey_filter]
+    else:
+        unfair_chosey_filter = dat['response']!=0
+        spks = spks[:,unfair_chosey_filter,:]
+        chcs = chcs[unfair_chosey_filter]
+        RTs = RTs[unfair_chosey_filter]
+        
 
     #grab only spikes from the VISp
     if brain_area:

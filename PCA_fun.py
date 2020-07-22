@@ -19,19 +19,21 @@ def neurons_PCA(dat,tVar,minT,maxT):
     #@title top PC directions from stimulus + response period, with projections of the entire duration
     NN = dat['spks'].shape[0]
     #All trials are concatenated to result in a session-long time series for each neuron:
-    droll = np.reshape(dat['spks'][:,:,minT:maxT], (NN,-1)) # first 80 bins = 1.6 sec
+    #droll = np.reshape(dat['spks'][:,:,minT:maxT], (NN,-1)) # first 80 bins = 1.6 sec
     #(N.B. only the time bins for stimulus + response are used!)
 
-    droll = droll - np.mean(droll, axis=1)[:, np.newaxis] #center each neuron's response vector
+    #droll = droll - np.mean(droll, axis=1)[:, np.newaxis] #center each neuron's response vector
     #(np.newaxis is used to add an additional dimension, to be consistent with the original droll matrix)
 
-    nPCs = NN #set how many PCs we are interested in (all of them)
+    droll = dat['spks'][:,:,minT:maxT].mean(axis=2)
+
+    nPCs = min(droll.shape) #set how many PCs we are interested in (all of them)
 
     model = PCA(n_components = nPCs).fit(droll.T) #perform PCA!
     weights = model.components_ #extract the weight of each PC dimension for each neuron
-    PCneurons = weights @ np.reshape(dat['spks'], (NN,-1)) #multiply each neuron by its corresponding weights
+    PCneurons = weights @ droll #multiply each neuron by its corresponding weights
     #(N.B. the entire trial durations for each neuron are multiplied by the weight! But weight were extracted only from a portion)
-    PCneurons = np.reshape(PCneurons, (nPCs, -1, NT)) #session-long time series are split again into trial-long time series
+    #PCneurons = np.reshape(PCneurons, (nPCs, -1, NT)) #session-long time series are split again into trial-long time series
 
     explVar = model.explained_variance_
     plt.figure()

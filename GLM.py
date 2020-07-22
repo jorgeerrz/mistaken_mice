@@ -12,7 +12,7 @@ def plot_weights(models, sharey=True):
   axs = np.atleast_1d(axs)
 
   for ax, (title, model) in zip(axs, models.items()):
-
+    
     ax.margins(x=.02)
     stem = ax.stem(model.coef_.squeeze(), use_line_collection=True)
     stem[0].set_marker(".")
@@ -61,7 +61,7 @@ def GLM_logistic(features, choices, pen = "l2", lambda_L2 = 1):
   	 Input: features are in format features x trials x time
   	 Output: the trained model, weights
   """
-  feat_reshaped = reshaping_features(features)
+  feat_reshaped = features
   if pen == "l1":
     log_reg = LogisticRegression(penalty=pen, C = lambda_L2, solver="saga", max_iter=5000).fit(feat_reshaped,choices)
   else: 
@@ -73,8 +73,8 @@ def GLM_logistic(features, choices, pen = "l2", lambda_L2 = 1):
   }
   plot_weights(models)
 
-  train_accuracy = compute_accuracy(spks_f, chcs_f, log_reg)
-  print(f"Accuracy on the training data: {train_accuracy:.2%}")
+  #train_accuracy = compute_accuracy(features, choices, log_reg)
+  #print(f"Accuracy on the training data: {train_accuracy:.2%}")
 
   return log_reg
 
