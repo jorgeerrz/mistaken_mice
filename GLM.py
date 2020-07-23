@@ -22,7 +22,7 @@ def plot_weights(models, sharey=True):
     stem[2].set_visible(False)
     ax.axhline(0, color="C3", lw=3)
     ax.set(ylabel="Weight", title=title)
-  ax.set(xlabel="Feature x time")
+  ax.set(xlabel="Feature")
   f.tight_layout()
 
 def compute_accuracy(X, y, model):
