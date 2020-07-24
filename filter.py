@@ -25,7 +25,7 @@ def filter_spikes(alldata, session_id,brain_area=None,unfair_only=True):
 
     #grab only spikes from the VISp
     if brain_area:
-        spks = spks[dat['brain_area']==brain_area,:,:]
+        spks = spks[np.isin(dat['brain_area'],brain_area),:,:]
 
     #grab only spikes from between -500ms and 500ms, relative to stimulus onset (each bin is 10ms)
     #spks = spks[:,:,0:100]
