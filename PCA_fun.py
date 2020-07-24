@@ -6,7 +6,7 @@ Created on Tue Jul 21 18:36:53 2020
 """
 
 
-def neurons_PCA(dat,tVar,minT,maxT):
+def neurons_PCA(dat,tVar,minT,maxT,toplot=False):
     #Perform PCA with the neurons of a single session. Components are estimated by considering activity in the range minT:maxT
     #Example input neurons_PCA(dat,0.9,51,130)
 
@@ -36,33 +36,37 @@ def neurons_PCA(dat,tVar,minT,maxT):
     #PCneurons = np.reshape(PCneurons, (nPCs, -1, NT)) #session-long time series are split again into trial-long time series
 
     explVar = model.explained_variance_
-    plt.figure()
-    plt.bar(range(nPCs),explVar)
-    plt.xlabel('Eigenvector')
-    plt.ylabel('Explained variance')
+    
 
-    tVar = 0.9
     fracVar = explVar/np.sum(explVar) #fraction of explained variance for each PC
     cumVar = np.cumsum(fracVar) #cumulative sum of explained variance
     PCrange = np.max(np.where(cumVar<=tVar)) #The lowest number of components that explain the threshold variance
-    plt.plot([PCrange,PCrange],[0,np.max(explVar)],'r')
+    
+    if toplot == True:
+        plt.figure()
+        plt.bar(range(nPCs),explVar)
+        plt.xlabel('Eigenvector')
+        plt.ylabel('Explained variance')
+        
+        plt.plot([PCrange,PCrange],[0,np.max(explVar)],'r')
 
-    #@title The top PCs capture most variance across the brain. What do they care about?
-    plt.figure(figsize= (20, 6))
-    for iPC in range((PCneurons).shape[0]):
+        #@title The top PCs capture most variance across the brain. What do they care about?
+        plt.figure(figsize= (20, 6))
+    
+        for iPC in range((PCneurons).shape[0]):
 
-      this_pc = PCneurons[iPC]
+          this_pc = PCneurons[iPC]
 
-      plt.plot(this_pc.mean(axis=0))
+          plt.plot(this_pc.mean(axis=0))
 
-      if iPC==0:
-        plt.legend(['right only', 'left only', 'neither', 'both'], fontsize=8)
-        plt.xlabel('binned time')
-        plt.ylabel('Component value')
-      # plt.title('PC %d'%j)
+          if iPC==0:
+            plt.legend(['right only', 'left only', 'neither', 'both'], fontsize=8)
+            plt.xlabel('binned time')
+            plt.ylabel('Component value')
+          # plt.title('PC %d'%j)
 
     dat['PCs'] = PCneurons
     dat['weights'] = weights
-    dat['PCrange'] = PCrange
+    dat['PCrange'] = PCrange+1
 
     return dat
