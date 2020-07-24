@@ -2,15 +2,24 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
 
+def pretty_response_counts(responses):
+    (unique, counts) = np.unique(responses, return_counts=True)
+    response_labels = np.array(['right (-1)', 'none (0)  ', 'left (1)  '])
+    count_pct = [100*c/np.sum(counts) for c in counts]
+    pretty = []
+    for i, u in enumerate(unique):
+        pretty.append = "{}: {} ({}%)\n" .format( response_labels[int(u)+1], counts[i], int(count_pct[i]) )
+    return pretty
+    
 def summarise_dataset(dataset):
-	'''
-	Summarise reduced dataset 
-	INPUT: (filtered) np data array, Steinmetz data
-	OUTPUT: plot/table showing no. neurons for each session
-	'''
-	n_sessions = np.shape(dataset)[0]
-	details = np.zeros((n_sessions,3))
-	details = {'n_neurons' : np.zeros(n_sessions),
+    '''
+    Summarise reduced dataset 
+    INPUT: (filtered) np data array, Steinmetz data
+    OUTPUT: plot/table showing no. neurons for each session
+    '''
+    n_sessions = np.shape(dataset)[0]
+    details = np.zeros((n_sessions,3))
+    details = {'n_neurons' : np.zeros(n_sessions),
 			 'n_trials': np.zeros(n_sessions),
 			 'n_timebins': np.zeros(n_sessions)}
 	for idx in range(n_sessions):
