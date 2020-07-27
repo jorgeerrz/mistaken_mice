@@ -7,7 +7,13 @@ def rebin(input, newbin, oldbin = 0.01):
   input = three-dimensional data array with spike counts (dat['spks'], dimensions: neurons * trials * time bins)
   newbin = size of the new time bin in seconds
   oldbin = size of old time bin. default 0.01s
+
+  Returns:
+  newcount = spike count in new bin
+  newbin = size of new bin size
   '''
+
+  assert newbin > oldbin 'new bin size must be bigger than old bin size'
 
   # initialize variables
   poolbin = newbin/oldbin # calculates numbers of bins to be pooled into one new bin
