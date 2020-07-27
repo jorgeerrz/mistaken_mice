@@ -33,12 +33,12 @@ def summarise_session(dataset, sessionID):
     
     # responses for all trials
     session_pretty, session_unique, session_counts = pretty_response_counts(session['response'])
-    print("\n{} trials\n{}" .format(session['spks'].shape[1], session_pretty ))
+    print("\n{} trials total\n{}" .format(session['spks'].shape[1], session_pretty ))
     
-    # responses for unfair trials
-    unfair = filter_spikes(dataset, sessionID,unfair_only=True) 
+    # responses for non-zero unfair trials
+    unfair = filter_spikes(dataset, sessionID,unfair_only=True,chosey_only=True,nonzero_only=True) 
     unfair_pretty, unfair_unique, unfair_counts = pretty_response_counts(unfair['chcs'])
-    print("{} unfair trials\n{}" .format(unfair['spks'].shape[1], unfair_pretty ))
+    print("{} non-zero contrast unfair trials with a choice\n{}" .format(unfair['spks'].shape[1], unfair_pretty ))
 
     
 def summarise_dataset(dataset):
