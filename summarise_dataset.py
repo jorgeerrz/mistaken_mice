@@ -1,15 +1,32 @@
 from matplotlib import pyplot as plt
 import seaborn as sns
 import numpy as np
+from filter import *
 
 def pretty_response_counts(responses):
     (unique, counts) = np.unique(responses, return_counts=True)
-    response_labels = np.array(['right (-1)', 'none (0)  ', 'left (1)  '])
+    response_labels = np.array(['right (-1)', 'centre (0)', 'left (1)  '])
     count_pct = [100*c/np.sum(counts) for c in counts]
-    pretty = []
+    pretty = ""
     for i, u in enumerate(unique):
-        pretty.append = "{}: {} ({}%)\n" .format( response_labels[int(u)+1], counts[i], int(count_pct[i]) )
-    return pretty
+        pretty += "{}: {} ({}%)\n" .format( response_labels[int(u)+1], counts[i], int(count_pct[i]) ) 
+    return pretty, unique, counts
+
+def summarise_session(dataset, sessionID):
+    session = dataset[sessionID]
+    print("\n\nSession ID: {}\n" .format(sessionID ) )
+    for ba in np.sort(np.unique(session['brain_area'])):
+        ba_filter = session['brain_area']==ba
+        n_neurons = session['spks'][ba_filter,:,:].shape[0]
+        print("{}: {} neurons" .format(ba,n_neurons))
+
+    session_pretty, session_unique, session_counts = pretty_response_counts(session['response'])
+    print("{} trials\n{}" .format(session['spks'].shape[1], session_pretty ))
+
+    unfair = filter_spikes(dataset, sessionID,unfair_only=True) 
+    unfair_pretty, unfair_unique, unfair_counts = pretty_response_counts(unfair['chcs'])
+    print("{} unfair trials\n{}" .format(unfair['spks'].shape[1], unfair_pretty ))
+
     
 def summarise_dataset(dataset):
     '''
@@ -20,55 +37,22 @@ def summarise_dataset(dataset):
     n_sessions = np.shape(dataset)[0]
     details = np.zeros((n_sessions,3))
     details = {'n_neurons' : np.zeros(n_sessions),
-			 'n_trials': np.zeros(n_sessions),
-			 'n_timebins': np.zeros(n_sessions)}
-	for idx in range(n_sessions):
-		this_session = dataset[idx]
-		details['n_neurons'][idx], details['n_trials'][idx], details['n_timebins'][idx] = np.shape(this_session['spks'])
-	
-	total_neurons = int(np.sum(details['n_neurons']))
-	total_trials = int(np.sum(details['n_trials']))
+               'n_trials': np.zeros(n_sessions),
+               'n_timebins': np.zeros(n_sessions)}
+    for idx in range(n_sessions):
+        this_session = dataset[idx]
+        details['n_neurons'][idx], details['n_trials'][idx], details['n_timebins'][idx] = np.shape(this_session['spks'])
 
-	sns.set(style="white", palette="muted", color_codes=True)
-	fig, axs = plt.subplots(1, 2, figsize=(7, 3))
-	sns.despine(left=True)
+    total_neurons = int(np.sum(details['n_neurons']))
+    total_trials = int(np.sum(details['n_trials']))
+    
+    sns.set(style="white", palette="muted", color_codes=True)
+    fig, axs = plt.subplots(1, 2, figsize=(7, 3))
+    sns.despine(left=True)
+    
+    sns.distplot(details['n_neurons'], kde = False, color='b', rug=True, ax=axs[0], axlabel ='Number of neurons\nper session')
+    axs[0].set_title('{} neurons across sessions'.format(total_neurons))
+    sns.distplot(details['n_trials'], kde = False, color='g', rug=True, ax=axs[1], axlabel = 'Number of trials\nper session')
+    axs[1].set_title('{} trials across sessions'.format(total_trials))
 
-	sns.distplot(details['n_neurons'], kde = False, color='b', rug=True, ax=axs[0], axlabel ='Number of neurons\nper session')
-	axs[0].set_title('{} neurons across sessions'.format(total_neurons))
-	sns.distplot(details['n_trials'], kde = False, color='g', rug=True, ax=axs[1], axlabel = 'Number of trials\nper session')
-	axs[1].set_title('{} trials across sessions'.format(total_trials))
-
-	return details
-
-if __name__ == "__main__":
-
-	# Data retrieval
-	import os, requests
-
-	fname = []
-	for j in range(3):
-	  fname.append('steinmetz_part%d.npz'%j)
-	url = ["https://osf.io/agvxh/download"]
-	url.append("https://osf.io/uv3mw/download")
-	url.append("https://osf.io/ehmw2/download")
-
-	for j in range(len(url)):
-		if not os.path.isfile(fname[j]):
-			try:
-				r = requests.get(url[j])
-			except requests.ConnectionError:
-				print("!!! Failed to download data !!!")
-			else:
-				if r.status_code != requests.codes.ok:
-					print("!!! Failed to download data !!!")
-				else:
-					with open(fname[j], "wb") as fid:
-						fid.write(r.content)
-  
-	# Data loading
-	alldat = np.array([])
-	for j in range(len(fname)):
-	  alldat = np.hstack((alldat, np.load('steinmetz_part%d.npz'%j, allow_pickle=True)['dat']))
-	
-	# summarise the dataset
-	summarise_dataset(alldat)
+    return details
