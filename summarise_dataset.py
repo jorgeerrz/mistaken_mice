@@ -12,17 +12,30 @@ def pretty_response_counts(responses):
         pretty += "{}: {} ({}%)\n" .format( response_labels[int(u)+1], counts[i], int(count_pct[i]) ) 
     return pretty, unique, counts
 
+def count_neurons_by_area(dataset, sessionID):
+    session = dataset[sessionID]
+    neuron_count = {'brain_area': [], 'n_neurons': []}
+    for ba in np.sort(np.unique(session['brain_area'])):
+        neuron_count['brain_area'].append(ba)
+        ba_filter = session['brain_area']==ba
+        n_neurons = session['spks'][ba_filter,:,:].shape[0]
+        neuron_count['n_neurons'].append(n_neurons)
+    return(neuron_count)
+
 def summarise_session(dataset, sessionID):
     session = dataset[sessionID]
     print("\n\nSession ID: {}\n" .format(sessionID ) )
-    for ba in np.sort(np.unique(session['brain_area'])):
-        ba_filter = session['brain_area']==ba
-        n_neurons = session['spks'][ba_filter,:,:].shape[0]
-        print("{}: {} neurons" .format(ba,n_neurons))
-
+    
+    # brain areas
+    neuron_count = count_neurons_by_area(dataset, sessionID)
+    for i, ba in enumerate(neuron_count['brain_area']):
+        print("{}: {} neurons" .format(ba,neuron_count['n_neurons'][i]))
+    
+    # responses for all trials
     session_pretty, session_unique, session_counts = pretty_response_counts(session['response'])
-    print("{} trials\n{}" .format(session['spks'].shape[1], session_pretty ))
-
+    print("\n{} trials\n{}" .format(session['spks'].shape[1], session_pretty ))
+    
+    # responses for unfair trials
     unfair = filter_spikes(dataset, sessionID,unfair_only=True) 
     unfair_pretty, unfair_unique, unfair_counts = pretty_response_counts(unfair['chcs'])
     print("{} unfair trials\n{}" .format(unfair['spks'].shape[1], unfair_pretty ))
