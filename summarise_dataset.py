@@ -117,19 +117,19 @@ def summarise_dataset(dataset):
     return details
 
 def plot_results(results):
-    fig, axs = plt.subplots(3, 1, figsize=(10, 4))
-
-    axs[0].plot(results['Session'], results['Accuracies'], 'o', color = 'b')
-    axs[0].plot(results['Session'], results['Bias'], 'o', color = 'r')
+    fig, axs = plt.subplots(3, 1, figsize=(10, 10))
+    
+    axs[0].plot(results['Sessions'], results['Accuracies'], 'o', color = 'b')
+    axs[0].plot(results['Sessions'], results['Biases'], 'o', color = 'r')
     axs[0].set_xlabel("Session")
     axs[0].set_ylabel("Proportion")
     axs[0].set_title("Classifier Performance")
-    plt.legend(['classifier accuracy', 'baseline (bias in data)'], bbox_to_anchor=(1, 1), loc='upper right')
-    
-    axs[1].plot(results['Session'], results['TrialCount'], 'o', color = 'g')
+    axs[0].legend(['classifier accuracy', 'baseline (bias in data)'], bbox_to_anchor=(1, 1), loc='upper right')
+
+    axs[1].plot(results['Sessions'], results['TrialCounts'], 'o', color = 'g')
     axs[1].set_xlabel("Session")
     axs[1].set_ylabel("Number of trials")
-    
-    axs[2].plot(results['Session'], results['PC count'], 'o', color = 'g')
+
+    axs[2].plot(results['Sessions'], results['PCcounts'], 'o', color = 'g')
     axs[2].set_xlabel("Session")
     axs[2].set_ylabel("Number of principal components")
