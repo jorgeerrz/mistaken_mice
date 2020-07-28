@@ -126,7 +126,7 @@ def plot_results(results):
     axs[0].set_title("Classifier Performance vs. Bias in data")
 #     axs[0].legend(['classifier accuracy', 'baseline (bias in data)'], bbox_to_anchor=(1, 1), loc='upper right')
 
-    axs[0].plot(np.arange(0.,np.max(results['TrialCounts'],1), np.arange(0.,np.max(results['TrialCounts'],1), color = 'k')
+    axs[1].plot(np.arange(0.,np.max(results['TrialCounts'])), np.arange(0.,np.max(results['TrialCounts'])), color = 'k')
     axs[1].plot(results['TrialCounts'], results['PCcounts'], 'o', color = 'g')
     axs[1].set_xlabel("Number of trials")
     axs[1].set_ylabel("Number of principal components")

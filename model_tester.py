@@ -18,7 +18,7 @@ def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_on
             
             #filtered = rebin(filtered, 50, 250, 2)
 
-            dat = neurons_PCA(filtered,pcvar,0,250)
+            dat = neurons_PCA(filtered,pcvar,50,150)
             
             
             if np.logical_or(np.sum(dat['chcs']==-1)<2,np.sum(dat['chcs']==1)<2):
@@ -37,9 +37,9 @@ def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_on
             choice_bias = [left_bias if left_bias > .5 else (1.0-left_bias)]
             if toweight:
                 w = {-1:left_bias, 1:(1-left_bias)}
-                logreg = LogisticRegression(penalty = penalty, C = Cpen,class_weight=w)
+                logreg = LogisticRegression(penalty = penalty, C = Cpen,class_weight=w,solver='liblinear')
             else:
-                logreg = LogisticRegression(penalty = penalty, C = Cpen)
+                logreg = LogisticRegression(penalty = penalty, C = Cpen,solver='liblinear')
            # l1args = {'solver':"saga", 'max_iter':5000}
             splitter = LeaveOneOut()
             splits = splitter.split(dat['PCs'].T)
