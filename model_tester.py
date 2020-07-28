@@ -5,7 +5,7 @@ from rebin import *
 from sklearn.model_selection import *
 
 
-def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_only=True,nonzero_only=True,l2_penalty=None, toweight = False,verbose=True):
+def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_only=True,nonzero_only=True,penalty_type='none',Cpen=1, toweight = False,verbose=True):
     output = []
     output = {'Sessions':[],'Accuracies':[],'Biases':[], 'PCcounts':[], 'TrialCounts':[]}
     for session in sessions:
@@ -25,21 +25,36 @@ def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_on
                 continue
                 
             dat['PCs'] = dat['PCs'][0:dat['PCrange'],:]
-            if l2_penalty:
+            
+            if penalty_type=='l2':
                 penalty = "l2"
-                Cpen = l2_penalty
-            else:
+                Cpen = Cpen
+                solver='liblinear'
+                max_iter=5000
+            elif penalty_type=='l1':
+                penalty = 'l1'
+                Cpen = Cpen
+                solver="saga"
+                max_iter=5000
+            elif penalty_type=='none':
                 penalty = "none"
                 Cpen = 1
+                solver='liblinear'
+                max_iter=5000
+            else:
+                penalty = penalty_type
+                Cpen = Cpen
+                solver='liblinear'
+                max_iter=5000
                 
             l1args = {}
             left_bias = np.mean((filtered['chcs'])==1)
             choice_bias = [left_bias if left_bias > .5 else (1.0-left_bias)]
             if toweight:
                 w = {-1:left_bias, 1:(1-left_bias)}
-                logreg = LogisticRegression(penalty = penalty, C = Cpen,class_weight=w,solver='liblinear')
+                logreg = LogisticRegression(penalty = penalty, C = Cpen,class_weight=w,solver=solver,max_iter=max_iter)
             else:
-                logreg = LogisticRegression(penalty = penalty, C = Cpen,solver='liblinear')
+                logreg = LogisticRegression(penalty = penalty, C = Cpen,solver=solver,max_iter=max_iter)
            # l1args = {'solver':"saga", 'max_iter':5000}
             splitter = LeaveOneOut()
             splits = splitter.split(dat['PCs'].T)
