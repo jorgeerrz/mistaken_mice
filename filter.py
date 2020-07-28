@@ -8,6 +8,7 @@ def filter_spikes(alldata, session_id,brain_area=None,unfair_only=True,chosey_on
     spks = dat['spks']
     chcs = dat['response']
     RTs = dat['response_time']
+    ba = dat['brain_area']
 
     #grab only spikes/choices from trials where left/right contrast is equal and nonzero
     unfair_filter = (dat['contrast_right']==dat['contrast_left'])
@@ -33,11 +34,12 @@ def filter_spikes(alldata, session_id,brain_area=None,unfair_only=True,chosey_on
     #grab only spikes from the VISp
     if brain_area:
         spks = spks[np.isin(dat['brain_area'],brain_area),:,:]
+        ba = ba[np.isin(dat['brain_area'],brain_area)]
 
     #grab only spikes from between -500ms and 500ms, relative to stimulus onset (each bin is 10ms)
     #spks = spks[:,:,0:100]
 
-    return {'spks':spks, 'chcs':chcs, 'RTs':RTs}
+    return {'spks':spks, 'chcs':chcs, 'RTs':RTs, 'brain_area':ba}
 
 
 def filter_dataset(alldata):

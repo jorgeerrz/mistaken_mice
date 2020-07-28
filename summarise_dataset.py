@@ -83,7 +83,8 @@ def plot_session(dataset, sessionID, select_areas = None, unfair_only=True,chose
     
     axs[1].set_xlabel("Trial set")
     axs[1].set_ylabel("Responses")
-    axs[0].set_title("Session {}" .format(sessionID))
+    axs[0].set_title("Session {}. {} neurons total" .format(sessionID, np.sum(neuron_count['n_neurons'])))  
+
     plt.legend(response_labels, bbox_to_anchor=(2, 1), loc='upper right')
 
     
