@@ -4,7 +4,7 @@ Created on Tue Jul 21 18:36:53 2020
 
 @author: Iacopo
 """
-
+from scipy import stats
 
 def neurons_PCA(dat,tVar,minT,maxT,toplot=False):
     #Perform PCA with the neurons of a single session. Components are estimated by considering activity in the range minT:maxT
@@ -22,11 +22,11 @@ def neurons_PCA(dat,tVar,minT,maxT,toplot=False):
     #droll = np.reshape(dat['spks'][:,:,minT:maxT], (NN,-1)) # first 80 bins = 1.6 sec
     #(N.B. only the time bins for stimulus + response are used!)
 
-    #droll = droll - np.mean(droll, axis=1)[:, np.newaxis] #center each neuron's response vector
+   # droll = droll - np.mean(droll, axis=1)[:, np.newaxis] #center each neuron's response vector
     #(np.newaxis is used to add an additional dimension, to be consistent with the original droll matrix)
-
+    
     droll = dat['spks'][:,:,minT:maxT].mean(axis=2)
-
+    droll = stats.zscore(droll,axis=1)
     nPCs = min(droll.shape) #set how many PCs we are interested in (all of them)
 
     model = PCA(n_components = nPCs).fit(droll.T) #perform PCA!

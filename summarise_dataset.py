@@ -118,12 +118,12 @@ def summarise_dataset(dataset):
     return details
 
 def plot_results(results):
-    fig, axs = plt.subplots(2, 1, figsize=(10, 10))
+    fig, axs = plt.subplots(3, 1, figsize=(10, 10))
     
-    axs[0].plot(np.arange(0.,1.,0.1), np.arange(0.,1.,0.1), color = 'k')
-    axs[0].plot(results['Biases'], results['Accuracies'], 'o', color = 'b')
-    axs[0].set_xlabel("Bias")
-    axs[0].set_ylabel("Accuracy")
+    axs[0].plot(np.arange(0,1.,0.1), np.arange(0,1.,0.1), color = 'k')
+    axs[0].plot(results['Accuracies_bias'], results['Accuracies'], 'o', color = 'b')
+    axs[0].set_xlabel("Accuracy of Bias")
+    axs[0].set_ylabel("Accuracy of GLM")
     axs[0].set_title("Classifier Performance vs. Bias in data")
 #     axs[0].legend(['classifier accuracy', 'baseline (bias in data)'], bbox_to_anchor=(1, 1), loc='upper right')
 
@@ -131,4 +131,8 @@ def plot_results(results):
     axs[1].plot(results['TrialCounts'], results['PCcounts'], 'o', color = 'g')
     axs[1].set_xlabel("Number of trials")
     axs[1].set_ylabel("Number of principal components")
-
+    
+    axs[2].plot(results['TrialCounts'], results['Accuracies'], 'o',label='GLM', color = 'blue')
+    axs[2].plot(results['TrialCounts'], results['Accuracies_bias'], 'o',label='Naive', color = 'orange')
+    axs[2].set_xlabel("Number of trials")
+    axs[2].set_ylabel("Accuracy")

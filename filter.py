@@ -16,7 +16,7 @@ def filter_spikes(alldata, session_id,brain_area=None,unfair_only=True,chosey_on
     chosey_filter = dat['response']!=0
     
     
-    trial_filter = np.ones(chcs.shape)
+    trial_filter = np.full(chcs.shape, True, dtype=bool)
     
     if unfair_only:
         trial_filter = np.logical_and(trial_filter,unfair_filter)
@@ -38,6 +38,11 @@ def filter_spikes(alldata, session_id,brain_area=None,unfair_only=True,chosey_on
 
     #grab only spikes from between -500ms and 500ms, relative to stimulus onset (each bin is 10ms)
     #spks = spks[:,:,0:100]
+    
+    #Filter out neurons with no spikes
+    novar_neurons = (np.std(spks.mean(axis=2),axis=1)!=0)
+    spks = spks[novar_neurons,:,:]
+    ba = ba[novar_neurons]
 
     return {'spks':spks, 'chcs':chcs, 'RTs':RTs, 'brain_area':ba}
 
