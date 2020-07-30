@@ -1,0 +1,10 @@
+Slides:
+    1. Motivation + Methods (Task schematic, #PCs/trials, Regularization plot, logistic regression schematic/equation, extracting neuron weights from PCs)
+    
+            Picture showing "unfair trial"
+            "big big picture" showing concept of internal biases
+            
+            BBpicture, then task, then methods
+            
+    2. Results with all trials (Accuracy vs. Bias + Brain Area Weighting [one session scatter and all violion]) - representative example, then all sessions 
+    3. Results with only unfair trials (Accuracy vs. Bias + Brain Area Weighting [one session scatter and all violion])

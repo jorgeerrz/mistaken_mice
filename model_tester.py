@@ -5,9 +5,9 @@ from rebin import *
 from sklearn.model_selection import *
 
 
-def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_only=True,nonzero_only=True,penalty_type='none',Cpen=1, toweight = False,verbose=True):
+def test_model(alldat,sessions, brain_areas,pcvar=0.5,unfair_only=True,chosey_only=True,nonzero_only=True,penalty_type='none',Cpen=1, toweight = False,verbose=True):
     output = []
-    output = {'Sessions':[],'Accuracies':[],'Biases':[], 'PCcounts':[], 'TrialCounts':[],'Advantages':[],'Brier_GLM':[],'Brier_Bias':[],'Accuracies_bias':[]}
+    output = {'Sessions':[],'Accuracies':[],'Biases':[], 'PCcounts':[], 'TrialCounts':[],'Advantages':[],'Brier_GLM':[],'Brier_Bias':[],'Accuracies_bias':[],'Neuroncount':[]}
     for session in sessions:
         if np.sum(np.isin(alldat[session]['brain_area'],brain_areas))>0:
             
@@ -112,7 +112,7 @@ def test_model(alldat,sessions, brain_areas,pcvar=0.9,unfair_only=True,chosey_on
             
             output['Brier_GLM'].append(np.mean(np.square(glm_offsets)))
             output['Brier_Bias'].append(np.mean(np.square(bias_offsets)))
-
+            output['Neuroncount'].append(filtered['spks'].shape[0])
             output['PCcounts'].append(dat['PCs'].shape[0])
             output['TrialCounts'].append(len(accuracies))
 

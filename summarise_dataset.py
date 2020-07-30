@@ -118,7 +118,7 @@ def summarise_dataset(dataset):
     return details
 
 def plot_results(results):
-    fig, axs = plt.subplots(3, 1, figsize=(10, 10))
+    fig, axs = plt.subplots(4, 1, figsize=(10, 10))
     
     axs[0].plot(np.arange(0,1.,0.1), np.arange(0,1.,0.1), color = 'k')
     axs[0].plot(results['Accuracies_bias'], results['Accuracies'], 'o', color = 'b')
@@ -136,3 +136,8 @@ def plot_results(results):
     axs[2].plot(results['TrialCounts'], results['Accuracies_bias'], 'o',label='Naive', color = 'orange')
     axs[2].set_xlabel("Number of trials")
     axs[2].set_ylabel("Accuracy")
+    
+    axs[3].plot(results['Neuroncount'], results['Accuracies'], 'o',label='GLM', color = 'blue')
+    axs[3].plot(results['Neuroncount'], results['Accuracies_bias'], 'o',label='Naive', color = 'orange')
+    axs[3].set_xlabel("Number of neurons")
+    axs[3].set_ylabel("Accuracy")
