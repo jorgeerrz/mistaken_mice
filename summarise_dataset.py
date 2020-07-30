@@ -118,26 +118,33 @@ def summarise_dataset(dataset):
     return details
 
 def plot_results(results):
-    fig, axs = plt.subplots(4, 1, figsize=(10, 10))
+    fig, axs = plt.subplots(4, 1, figsize=(4, 15))
     
-    axs[0].plot(np.arange(0,1.,0.1), np.arange(0,1.,0.1), color = 'k')
-    axs[0].plot(results['Accuracies_bias'], results['Accuracies'], 'o', color = 'b')
-    axs[0].set_xlabel("Accuracy of Bias")
-    axs[0].set_ylabel("Accuracy of GLM")
-    axs[0].set_title("Classifier Performance vs. Bias in data")
-#     axs[0].legend(['classifier accuracy', 'baseline (bias in data)'], bbox_to_anchor=(1, 1), loc='upper right')
+    axs[0].plot([0,1], [0,1], color = 'k')
+    axs[0].plot(results['Accuracies_bias'], results['Accuracies'], 'o', markersize=6, markerfacecolor='#1f78b4',
+             markeredgewidth=1, markeredgecolor='k')
+    axs[0].set_xlabel("Naive classifier accuracy")
+    axs[0].set_ylabel("GLM classifier accuracy")
+    axs[0].set_title("GLM classifier vs. Naive classifier")
 
-    axs[1].plot(np.arange(0.,np.max(results['TrialCounts'])), np.arange(0.,np.max(results['TrialCounts'])), color = 'k')
-    axs[1].plot(results['TrialCounts'], results['PCcounts'], 'o', color = 'g')
+    axs[1].plot([0,np.max(results['TrialCounts'])], [0.,np.max(results['TrialCounts'])], color = 'k')
+    axs[1].plot(results['TrialCounts'], results['PCcounts'], 'o', markersize=6, markerfacecolor='#33a02c',
+             markeredgewidth=1, markeredgecolor='k')
     axs[1].set_xlabel("Number of trials")
     axs[1].set_ylabel("Number of principal components")
     
-    axs[2].plot(results['TrialCounts'], results['Accuracies'], 'o',label='GLM', color = 'blue')
-    axs[2].plot(results['TrialCounts'], results['Accuracies_bias'], 'o',label='Naive', color = 'orange')
+    axs[2].plot(results['TrialCounts'], results['Accuracies'], 'o',label='GLM', markersize=6, markerfacecolor='#fc8d62',
+             markeredgewidth=1, markeredgecolor='k')
+    axs[2].plot(results['TrialCounts'], results['Accuracies_bias'], 'o',label='Naive', markersize=6, markerfacecolor='#8da0cb',
+             markeredgewidth=1, markeredgecolor='k')
     axs[2].set_xlabel("Number of trials")
     axs[2].set_ylabel("Accuracy")
+    axs[2].legend(['GLM classifier', 'Naive classifier'], bbox_to_anchor=(1.6, 1), loc='upper right')
     
-    axs[3].plot(results['Neuroncount'], results['Accuracies'], 'o',label='GLM', color = 'blue')
-    axs[3].plot(results['Neuroncount'], results['Accuracies_bias'], 'o',label='Naive', color = 'orange')
+    axs[3].plot(results['Neuroncount'], results['Accuracies'], 'o',label='GLM', markersize=6, markerfacecolor='#fc8d62',
+             markeredgewidth=1, markeredgecolor='k')
+    axs[3].plot(results['Neuroncount'], results['Accuracies_bias'], 'o',label='Naive', markersize=6, markerfacecolor='#8da0cb',
+             markeredgewidth=1, markeredgecolor='k')
     axs[3].set_xlabel("Number of neurons")
     axs[3].set_ylabel("Accuracy")
+    axs[3].legend(['GLM classifier', 'Naive classifier'], bbox_to_anchor=(1.6, 1), loc='upper right')
