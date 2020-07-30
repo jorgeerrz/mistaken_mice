@@ -127,7 +127,7 @@ def plot_results(results):
     axs[0].set_ylabel("GLM classifier accuracy")
     axs[0].set_title("GLM classifier vs. Naive classifier")
 
-    axs[1].plot([0,np.max(results['TrialCounts'])], [0.,np.max(results['TrialCounts'])], color = 'k')
+    #axs[1].plot([0,np.max(results['TrialCounts'])], [0.,np.max(results['PCcounts'])], color = 'k')
     axs[1].plot(results['TrialCounts'], results['PCcounts'], 'o', markersize=6, markerfacecolor='#33a02c',
              markeredgewidth=1, markeredgecolor='k')
     axs[1].set_xlabel("Number of trials")
